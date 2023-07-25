@@ -3,6 +3,9 @@ package com.MyFirstProjecy.Blog.Application.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -28,4 +31,6 @@ public class User {
     @Column(name = "about_user")
     private String about;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
 }
