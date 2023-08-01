@@ -1,7 +1,7 @@
 package com.MyFirstProjecy.Blog.Application.services;
 
-import com.MyFirstProjecy.Blog.Application.entities.Post;
 import com.MyFirstProjecy.Blog.Application.payloads.PostDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface PostService {
 
     void deletePost(Integer postId);
 
-    List<PostDto> getAllPost();
+    List<PostDto> getAllPost(Pageable page);
 
     PostDto getPost(Integer postId);
 

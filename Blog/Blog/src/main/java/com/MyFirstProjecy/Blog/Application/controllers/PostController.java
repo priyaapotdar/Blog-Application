@@ -5,6 +5,7 @@ import com.MyFirstProjecy.Blog.Application.payloads.PostDto;
 import com.MyFirstProjecy.Blog.Application.services.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,13 +45,13 @@ public class PostController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> listOfPost = postService.getAllPost();
+    public ResponseEntity<List<PostDto>> getAllPosts(Pageable page){
+        List<PostDto> listOfPost = postService.getAllPost(page);
         return new ResponseEntity<List<PostDto>>(listOfPost, HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDto> getAllPosts(@PathVariable Integer postId){
+    public ResponseEntity<PostDto> getPosts(@PathVariable Integer postId){
         PostDto post = postService.getPost(postId);
         return new ResponseEntity<PostDto>(post, HttpStatus.OK);
     }
@@ -59,6 +60,12 @@ public class PostController {
     public ApiResponse deletePost(@PathVariable Integer postId){
         postService.deletePost(postId);
         return new ApiResponse("post is successfully deleted !!", true);
+    }
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<PostDto>> getAllPostsWithKeyword(@PathVariable String keyword){
+        List<PostDto> listOfPost = postService.searchPost(keyword);
+        return new ResponseEntity<List<PostDto>>(listOfPost, HttpStatus.OK);
     }
 
 
