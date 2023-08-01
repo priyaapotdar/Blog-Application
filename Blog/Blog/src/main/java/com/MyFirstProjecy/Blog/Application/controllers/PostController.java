@@ -2,20 +2,33 @@ package com.MyFirstProjecy.Blog.Application.controllers;
 
 import com.MyFirstProjecy.Blog.Application.payloads.ApiResponse;
 import com.MyFirstProjecy.Blog.Application.payloads.PostDto;
+import com.MyFirstProjecy.Blog.Application.services.FileService;
 import com.MyFirstProjecy.Blog.Application.services.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
-@AllArgsConstructor
 public class PostController {
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.image}")
+    private String path;
 
     @Autowired
     private PostService postService;
@@ -67,6 +80,24 @@ public class PostController {
         List<PostDto> listOfPost = postService.searchPost(keyword);
         return new ResponseEntity<List<PostDto>>(listOfPost, HttpStatus.OK);
     }
+
+    @PostMapping("/image/upload/{postId}")
+    public ResponseEntity<PostDto> uploadFile(@RequestParam("image") MultipartFile image,@PathVariable("postId") Integer postId) throws IOException {
+        PostDto post = postService.getPost(postId);
+        String  imageName = fileService.uploadImage(path,image);
+        post.setImageName(imageName);
+        PostDto updatedPost = postService.updatePost(post, postId);
+
+        return new ResponseEntity<PostDto>(updatedPost, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/get/image/{imageName}")
+     public ResponseEntity<byte[]> showImage(@PathVariable("imageName") String imageName) throws IOException {
+        InputStream is = fileService.getImage(path, imageName);
+        byte[] imageBytes = is.readAllBytes();
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+     }
 
 
 }
