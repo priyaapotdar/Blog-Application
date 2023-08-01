@@ -11,6 +11,8 @@ import com.MyFirstProjecy.Blog.Application.repositories.UserRepository;
 import com.MyFirstProjecy.Blog.Application.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -64,8 +66,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        return postRepository.findAll().stream().map(n -> modelMapper.map(n,PostDto.class)).toList();
+    public List<PostDto> getAllPost(Pageable page) {
+        Page<Post> pageList = postRepository.findAll(page);
+        return pageList.getContent().stream().map(n -> modelMapper.map(n,PostDto.class)).toList();
     }
 
     @Override
@@ -90,6 +93,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPost(String keyword) {
-        return null;
+        List<PostDto> postList = postRepository.findByPostTitleContainsIgnoreCase(keyword).stream().map(n-> modelMapper.map(n,PostDto.class)).collect(Collectors.toList());;
+        return postList;
     }
 }
