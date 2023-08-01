@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -34,6 +35,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "catrgoryId")
     private Category category;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private Set<Comments> comments;
 
 
 }
