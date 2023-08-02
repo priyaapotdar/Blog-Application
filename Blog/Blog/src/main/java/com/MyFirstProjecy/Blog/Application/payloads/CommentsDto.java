@@ -9,12 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentsDto {
 
-    private Integer commentId;
+    private Integer id;
 
     private Integer postId;
 
     private String comment;
-
-    private String userName;
 
 }

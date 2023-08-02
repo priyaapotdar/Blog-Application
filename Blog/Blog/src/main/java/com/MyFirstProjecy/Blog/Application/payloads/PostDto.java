@@ -1,9 +1,10 @@
 package com.MyFirstProjecy.Blog.Application.payloads;
 
+import com.MyFirstProjecy.Blog.Application.entities.Comments;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Date;
+import java.util.*;
 
 @NoArgsConstructor
 @Getter
@@ -26,5 +27,7 @@ public class PostDto {
     private Integer userId;
 
     private Integer categoryId;
+
+    private List<CommentsDto> comments = new ArrayList<>();
 
 }

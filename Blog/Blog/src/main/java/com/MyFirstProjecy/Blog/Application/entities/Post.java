@@ -3,8 +3,7 @@ package com.MyFirstProjecy.Blog.Application.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "post")
@@ -37,7 +36,7 @@ public class Post {
     private Category category;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    private Set<Comments> comments;
+    private List<Comments> comments =new ArrayList<>();
 
 
 }

@@ -15,15 +15,13 @@ public class Comments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     private String comment;
 
     @ManyToOne
     private Post post;
 
-    @ManyToOne
-    private User user;
 
 
 }

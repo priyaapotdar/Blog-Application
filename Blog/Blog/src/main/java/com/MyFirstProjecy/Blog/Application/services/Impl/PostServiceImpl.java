@@ -4,6 +4,7 @@ import com.MyFirstProjecy.Blog.Application.entities.Category;
 import com.MyFirstProjecy.Blog.Application.entities.Post;
 import com.MyFirstProjecy.Blog.Application.entities.User;
 import com.MyFirstProjecy.Blog.Application.exception.ResourceNotFoundException;
+import com.MyFirstProjecy.Blog.Application.payloads.CommentsDto;
 import com.MyFirstProjecy.Blog.Application.payloads.PostDto;
 import com.MyFirstProjecy.Blog.Application.repositories.CategoryRepository;
 import com.MyFirstProjecy.Blog.Application.repositories.PostRepository;
@@ -68,13 +69,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getAllPost(Pageable page) {
         Page<Post> pageList = postRepository.findAll(page);
-        return pageList.getContent().stream().map(n -> modelMapper.map(n,PostDto.class)).toList();
+        List<PostDto> list = pageList.getContent().stream().map(n -> modelMapper.map(n, PostDto.class)).toList();
+        return list;
     }
 
     @Override
     public PostDto getPost(Integer postId) {
         Post newPost = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "postId", postId));
-        return modelMapper.map(newPost,PostDto.class);
+        PostDto post = modelMapper.map(newPost, PostDto.class);
+        post.setComments(newPost.getComments().stream().map(n -> modelMapper.map(n, CommentsDto.class)).collect(Collectors.toList()));
+        return post;
     }
 
     @Override
