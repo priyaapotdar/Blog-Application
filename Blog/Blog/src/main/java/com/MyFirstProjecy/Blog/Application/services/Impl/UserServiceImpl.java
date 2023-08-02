@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = Optional.ofNullable(this.userRepository.
                 findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId)));
 
-        User updatedUser = User.builder().id(newUser.getId()).about(newUser.getAbout())
+        User updatedUser = User.builder().id(newUser.getId())
                 .email(newUser.getEmail()).name(newUser.getName()).password(newUser.getPassword()).build();
 
         this.userRepository.save(updatedUser);
